@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Naslovna stranica</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body class="naslovna">
+<style>
+
+    body
+    {
+        background-image:url({{url_for('static',filename='images/healthcare.jpg')}})
+    }
+
+</style>
+
+<main>
+  <p class="pocetna" >Medicinska web aplikacija</p>
+
+
+
+<div class="zadnjih_10">
+    <p class="prikaz_top_10">Prikaz temperature {{korisnici[0][1]}}</p>
+
+
+    <table class="zadnji">
+        <tbody>
+        <tr>
+        <th>Vrijeme</th>
+        <th>Temperatura</th>
+        </tr>
+        <ul>
+        {% for item in data_zadnji %}
+        <tr>
+        <td>{{item.vrijeme}}</td>
+        <td>{{item.vrijednost}}</td>
+        </tr>
+        {% endfor %}
+        </ul>
+        </tbody>
+        </table>
+</div>
+
+
+    <div class="top10">
+    <p class="prikaz-tablice">Prikaz otkucaja srca (bpm) </p>
+
+    <table class="top">
+        <tbody>
+        <tr>
+        <th>Vrijeme</th>
+        <th>BPM</th>
+        </tr>
+        <ul>
+        {% for item in data_top %}
+        <tr>
+        <td>{{item.vrijeme}}</td>
+        <td>{{item.vrijednost}}</td>
+        </tr>
+        {% endfor %}
+        </ul>
+        </tbody>
+        </table>
+    </div>
+        </div>
+
+
+    <div class="zadnjih_10">
+    <p class="prikaz_top_10">Prikaz temperature {{korisnici[1][1]}}</p>
+
+
+    <table class="zadnji">
+        <tbody>
+        <tr>
+        <th>Vrijeme</th>
+        <th>Temperatura</th>
+        </tr>
+        <ul>
+        {% for item in data_zadnji2 %}
+        <tr>
+        <td>{{item.vrijeme}}</td>
+        <td>{{item.vrijednost}}</td>
+        </tr>
+        {% endfor %}
+        </ul>
+        </tbody>
+        </table>
+</div>
+
+  <div class="top10">
+    <p class="prikaz-tablice">Prikaz otkucaja srca (bpm) </p>
+
+    <table class="top">
+        <tbody>
+        <tr>
+        <th>Vrijeme</th>
+        <th>BPM</th>
+        </tr>
+        <ul>
+        {% for item in data_top2 %}
+        <tr>
+        <td>{{item.vrijeme}}</td>
+        <td>{{item.vrijednost}}</td>
+        </tr>
+        {% endfor %}
+        </ul>
+        </tbody>
+        </table>
+    </div>
+        </div>
+
+
+    </div>
+        <div class="right">
+        <form action="/login" method="get">
+                <button class="odjava_korisnika" ></button>
+            </form>
+        </div>
+</main>
+
+</body>
+</html>
