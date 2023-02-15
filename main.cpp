@@ -2,7 +2,6 @@
 #include <WiFi.h>
 #include <ArduinoJson.h>
 #include <HTTPClient.h>
-#include "HX711.h"
 
 #include "Wire.h"
 #include <MAX3010x.h>
@@ -16,9 +15,10 @@
 // Definiranje senzora i display-a
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 Adafruit_MLX90614 mlx = Adafruit_MLX90614();
+float bpm_;
 
 // Podesiti u labosu
-String server_ip = "192.168.1.198:5000";
+String server_ip = "192.168.1.198";
 const char *ssid = "S20";
 const char *password = "Matislobode";
 const int GUMB_mjerenje = 16;
@@ -48,23 +48,9 @@ const int kSampleThreshold = 5;
 // const char *ssid = "ljolja";
 // const char *password = "purs2023";
 
-const int DOUT = 22;
-const int SCK_PIN = 18;
-const int tipkalo = 13;
-
-const long LOADCELL_OFFSET = 50682624;
-const long LOADCELL_DIVIDER = 5895655;
-
-int tipkalo_pom, pomocna;
-HX711 scale;
-
 StaticJsonDocument<200> doc;
 
 WiFiClient client;
-long sila;
-int id = 0;
-float sila_raw = 0;
-float prava_sila;
 
 void setup()
 {
@@ -143,17 +129,6 @@ float last_diff = NAN;
 bool crossed = false;
 long crossed_time = 0;
 
-void spremi_u_bazu(double vrijednost) 
-{
-  String vrijednost_string = String(vrijednost); // Pripremanje vrijednosti za slanje na server(konverzija  iz decimalnog broja u tekst)
-
-  // Slanje podataka na server
-  HTTPClient http;
-  http.begin("http://" + server_ip + "/unos_temperature"); // Određivanje adrese na koju šaljemo podatke
-  http.addHeader("Content-Type", "application/json"); // Tip podatka koji šaljemo na server da server zna kako tretirati taj podatak
-  http.POST("{\"vrijednost\":" + vrijednost_string + "}"); // Samo slanje podataka na server
-  http.end(); // Zatvaranje konekcije sa serverom i čiščenje radne memorije kontrolera
-}
 
 void loop()
 {
@@ -279,6 +254,7 @@ void loop()
                 Serial.println(millis());
                 Serial.print("Heart Rate (current, bpm): ");
                 Serial.println(bpm);
+                bpm_=bpm;
                 Serial.print("R-Value (current): ");
                 Serial.println(r);
                 Serial.print("SpO2 (current, %): ");
@@ -299,7 +275,8 @@ void loop()
       last_diff = current_diff;
     }
 
-    doc["bpm"] = last_heartbeat;
+    doc["bpm"] = bpm_;
+    doc["temperatura"] = vrijednost;
 
     String json;
     String jsonPretty;
@@ -309,7 +286,7 @@ void loop()
     Serial.println(json);
 
     HTTPClient http;
-    http.begin("http://"  + server_ip +  "/vitalne_funkcije");
+    http.begin("http://"  + server_ip +  "/funkcije");
 
     http.addHeader("Content-Type", "application/json");
 
