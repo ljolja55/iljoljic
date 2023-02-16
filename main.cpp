@@ -16,11 +16,12 @@
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 Adafruit_MLX90614 mlx = Adafruit_MLX90614();
 float bpm_;
+double vrijednost;
 
 // Podesiti u labosu
 String server_ip = "192.168.1.198";
-const char *ssid = "S20";
-const char *password = "Matislobode";
+const char *ssid = "4Tel - Bajic";
+const char *password = "bajic0303";
 const int GUMB_mjerenje = 16;
 const int LED_indikator = 17;
 
@@ -129,7 +130,6 @@ float last_diff = NAN;
 bool crossed = false;
 long crossed_time = 0;
 
-
 void loop()
 {
 // Provjera da li je gumb pritisnut
@@ -143,15 +143,16 @@ void loop()
     lcd.print("Temperatura:"); // Ispisivanje teksta na LCD-u
 
 // Uzimanje mjerenja senzorom
-    double vrijednost = mlx.readObjectTempC();
+    double vrijednost_raw = mlx.readObjectTempC();
 
     lcd.setCursor(4, 1);   // Postavljanje teksta na 4. stupac i 1. redak
-    lcd.print(vrijednost); // Ispisivanje temperature na LCD-u
+    lcd.print(vrijednost_raw); // Ispisivanje temperature na LCD-u
     lcd.print(" C");       // Ispisivanje temperature na LCD-u
 
     // Slanje podataka na server samo ako su validni
-    if (vrijednost != 0)
-      spremi_u_bazu(vrijednost);
+    if (vrijednost_raw != 0 && vrijednost_raw != NAN)
+      vrijednost = vrijednost_raw;
+      // spremi_u_bazu(vrijednost);
 
     digitalWrite(LED_indikator, LOW); // Gasimo LED indikator nakon završetka mjerenja
   }
