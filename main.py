@@ -195,7 +195,7 @@ def funkcije():
 
         mysql.connection.commit()
         print (bpm)
-        return "ke"
+        return "pl"
 
 
 
