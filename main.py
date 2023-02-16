@@ -6,14 +6,13 @@ from flask import url_for
 from flask import session
 from hashlib import sha256
 
-
 from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'app'
-app.config['MYSQL_PASSWORD'] ='1234'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] ='root'
 app.config['MYSQL_DB'] = "seminar"
 mysql = MySQL(app)
 
@@ -211,12 +210,12 @@ def rezultati1():
     cursor.execute(query)
     korisnicii = cursor.fetchall()
 
-    query = f"SELECT vrijeme, temperatura FROM podatci WHERE korisnik=1 ORDER BY vrijeme  DESC"
+    query = f"SELECT vrijeme, temperatura FROM seminar.podatci WHERE korisnik=1 ORDER BY vrijeme  DESC"
     cursor = mysql.connection.cursor()
     cursor.execute(query)
     temperature = cursor.fetchall()
 
-    query = f"SELECT vrijeme, temperatura FROM podatci WHERE korisnik=2 ORDER BY vrijeme  DESC"
+    query = f"SELECT vrijeme, temperatura FROM seminar.podatci WHERE korisnik=2 ORDER BY vrijeme  DESC"
     cursor = mysql.connection.cursor()
     cursor.execute(query)
     temperature2 = cursor.fetchall()
@@ -320,7 +319,7 @@ def rezultati1():
             'vrijednost': f'{temperature2[9][1]}',
         }
     ]
-    query = f"SELECT vrijeme, bpm FROM podatci WHERE korisnik=1 ORDER BY vrijeme  DESC"
+    query = f"SELECT vrijeme, bpm FROM seminar.podatci WHERE korisnik=1 ORDER BY vrijeme  DESC"
     cursor = mysql.connection.cursor()
     cursor.execute(query)
     otkucaji = cursor.fetchall()
@@ -367,7 +366,7 @@ def rezultati1():
         }
     ]
 
-    query = f"SELECT vrijeme, bpm FROM podatci WHERE korisnik=2 ORDER BY vrijeme  DESC"
+    query = f"SELECT vrijeme, bpm FROM seminar.podatci WHERE korisnik=2 ORDER BY vrijeme  DESC"
     cursor = mysql.connection.cursor()
     cursor.execute(query)
     otkucaji2 = cursor.fetchall()
